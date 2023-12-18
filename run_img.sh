@@ -8,7 +8,7 @@ IMG_PATH="/home/zihao/Documents/cvlv/footage/single_building/img_d$frame"
 PROCESSED_DATA_DIR="/home/zihao/Documents/cvlv/nerf/single_building"
 NERFACTO_DATA_DIR="/home/zihao/Documents/cvlv/nerf/single_building/output"
 
-python3 ./util/Vid_to_img.py --video_path "$DATA_PATH" --output_path "$IMG_PATH" --fps_divider "$frame"
+# python3 ./util/Vid_to_img.py --video_path "$DATA_PATH" --output_path "$IMG_PATH" --fps_divider "$frame"
 
 # DEHAZE(WIP)
 # python3 ./util/YOLY/RW_dehazing.py
