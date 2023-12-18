@@ -11,14 +11,10 @@ export QT_QPA_PLATFORM=offscreen
 
 # Run the command
 # ns-process-data {video,images,polycam,record3d} --data {DATA_PATH} --output-dir {PROCESSED_DATA_DIR}
-# ns-process-data "$DATA_TYPE" --data "$DATA_PATH" --output-dir "$PROCESSED_DATA_DIR"
+ns-process-data "$DATA_TYPE" --data "$DATA_PATH" --output-dir "$PROCESSED_DATA_DIR"
 
 # ns-train nerfacto --data {PROCESSED_DATA_DIR}
 # ns-train nerfacto --data "$PROCESSED_DATA_DIR" --output-dir "$NERFACTO_DATA_DIR"
-
-
-# Define the target line to monitor
-# target_line="Use ctrl+c to quit"
 
 # Loop to monitor the output
 ns-train nerfacto --data "$PROCESSED_DATA_DIR" --output-dir "$NERFACTO_DATA_DIR" 2>&1 | tee >(while IFS= read -r line; do
