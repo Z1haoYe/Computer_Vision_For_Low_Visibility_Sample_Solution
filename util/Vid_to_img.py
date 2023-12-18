@@ -1,46 +1,52 @@
 import cv2
 import os
+import argparse
 
-# Path to the video file
-video_path = 'E:\seris\data\\fog_30_deg_circle3\\fog_30_deg_circle3.MP4'
+def extract_frames(video_path, output_path, fps_divider):
+    # Create the output directory if it doesn't exist
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
 
-# Output directory for the images
-output_dir = 'E:\seris\data\\fog_30_deg_circle3\IMG_d10'
+    # Open the video file
+    cap = cv2.VideoCapture(video_path)
 
-# Create the output directory if it doesn't exist
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+    # Initialize a frame counter
+    frame_count = 0
+    extract_count = 0
 
-# Open the video file
-cap = cv2.VideoCapture(video_path)
+    # Loop through the video frames
+    while True:
+        # Read a frame from the video
+        ret, frame = cap.read()
 
-# Initialize a frame counter
-frame_count = 0
-extract_count = 0
+        # Break the loop if we have reached the end of the video
+        if not ret:
+            break
 
-# Number of frames to skip before extracting a frame
-fps_divider = 10  # Adjust this value as needed
+        # Check if it's time to save the frame based on the fps
+        if frame_count % fps_divider == 0:
+            # Save the frame as an image
+            frame_filename = os.path.join(output_path, f"frame_{frame_count:04d}.jpg")
+            cv2.imwrite(frame_filename, frame)
+            extract_count += 1
 
-# Loop through the video frames
-while True:
-    # Read a frame from the video
-    ret, frame = cap.read()
+        # Increment the frame counter
+        frame_count += 1
 
-    # Break the loop if we have reached the end of the video
-    if not ret:
-        break
+    # Release the video file
+    cap.release()
 
-    # Check if it's time to save the frame based on the fps
-    if frame_count % fps_divider == 0:
-        # Save the frame as an image
-        frame_filename = os.path.join(output_dir, f"frame_{frame_count:04d}.jpg")
-        cv2.imwrite(frame_filename, frame)
-        extract_count += 1
+    print(f"{extract_count} frames extracted and saved to {output_path}")
 
-    # Increment the frame counter
-    frame_count += 1
+if __name__ == "__main__":
+    # Set up command-line argument parsing
+    parser = argparse.ArgumentParser(description="Extract frames from a video.")
+    parser.add_argument("--video_path", help="Path to the video file", required=True)
+    parser.add_argument("--output_path", help="Output directory for the images", required=True)
+    parser.add_argument("--fps_divider", type=int, help="Extract every Nth frame", required=True)
 
-# Release the video file
-cap.release()
+    # Parse the command-line arguments
+    args = parser.parse_args()
 
-print(f"{extract_count} frames extracted and saved to {output_dir}")
+    # Call the function with the provided arguments
+    extract_frames(args.video_path, args.output_path, args.fps_divider)
